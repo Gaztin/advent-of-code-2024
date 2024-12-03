@@ -1,0 +1,11 @@
+﻿# Generated project files
+.build/
+*.sln
+
+# Visual Studio intermediate files
+/.vs/
+
+# Build output
+*.lib
+*.exe
+*.pdb
