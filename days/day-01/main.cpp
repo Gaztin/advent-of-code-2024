@@ -1,17 +1,24 @@
 #include <Common/Main.h>
 #include <regex>
 #include <vector>
+#include <map>
 
-std::string Main(const File& puzzleInput)
+struct Lists
 {
-	const auto       lines     = puzzleInput.ReadLines();
+	std::vector<int> leftList;
+	std::vector<int> rightList;
+};
+
+static Lists ParseLists(const PuzzleInput& puzzleInput)
+{
+	const auto       lines     = puzzleInput.Lines();
 	auto             lineRegex = std::regex(R"((\d+)\s+(\d+))");
 	std::vector<int> leftList{};
 	std::vector<int> rightList{};
 	for (auto& line : lines)
 	{
-		std::smatch match{};
-		if (!std::regex_match(line, match, lineRegex))
+		auto match = std::match_results<std::string_view::const_iterator>{};
+		if (!std::regex_match(line.begin(), line.end(), match, lineRegex))
 			throw std::runtime_error("Invalid input");
 
 		auto left  = std::stoi(match.str(1));
@@ -19,6 +26,13 @@ std::string Main(const File& puzzleInput)
 		leftList.push_back(left);
 		rightList.push_back(right);
 	}
+
+	return {leftList, rightList};
+}
+
+std::string PartOne(const PuzzleInput& puzzleInput)
+{
+	auto [leftList, rightList] = ParseLists(puzzleInput);
 
 	std::sort(leftList.begin(), leftList.end());
 	std::sort(rightList.begin(), rightList.end());
@@ -36,6 +50,25 @@ std::string Main(const File& puzzleInput)
 
 		++leftIterator;
 		++rightIterator;
+	}
+
+	return std::to_string(sum);
+}
+
+std::string PartTwo(const PuzzleInput& puzzleInput)
+{
+	auto [leftList, rightList] = ParseLists(puzzleInput);
+
+	int sum{0};
+	for (auto& left : leftList)
+	{
+		int occurrenceCount{0};
+		for (auto& right : rightList)
+		{
+			if (right == left)
+				++occurrenceCount;
+		}
+		sum += left * occurrenceCount;
 	}
 
 	return std::to_string(sum);

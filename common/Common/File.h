@@ -14,7 +14,7 @@ public:
 	File& operator=(const File&) = delete;
 	File& operator=(File&& other) noexcept;
 
-	std::vector<std::string> ReadLines() const;
+	std::string ReadAll() const;
 
 private:
 	FILE* m_file{};

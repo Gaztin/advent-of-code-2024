@@ -32,25 +32,16 @@ File& File::operator=(File&& other) noexcept
 	return *this;
 }
 
-std::vector<std::string> File::ReadLines() const
+std::string File::ReadAll() const
 {
-	auto lines = std::vector<std::string>{};
-	auto line  = std::string{};
-	while (true)
-	{
-		auto readResult = std::getc(m_file);
-		if ((readResult == EOF || readResult == '\n') && !line.empty())
-		{
-			lines.emplace_back(std::move(line));
-			line.clear();
-		}
-		else
-		{
-			line.push_back(static_cast<char>(readResult));
-		}
+	std::fseek(m_file, 0, SEEK_END);
+	auto size = static_cast<size_t>(std::ftell(m_file));
+	std::fseek(m_file, 0, SEEK_SET);
 
-		if (readResult == EOF)
-			break;
-	}
-	return lines;
+	auto buffer = std::string(size, '\0');
+	auto read   = std::fread(buffer.data(), 1, size, m_file);
+	if (read != size)
+		throw std::runtime_error("Failed to read file");
+
+	return buffer;
 }
