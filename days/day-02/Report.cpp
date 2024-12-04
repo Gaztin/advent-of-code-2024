@@ -14,6 +14,11 @@ Report::Report(std::string_view line)
 	}
 }
 
+void Report::RemoveLevelAt(size_t index)
+{
+	m_levels.erase(m_levels.begin() + index);
+}
+
 bool Report::IsSafe() const
 {
 	int lastDifference{0};

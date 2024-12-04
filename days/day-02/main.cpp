@@ -18,5 +18,28 @@ std::string PartOne(const PuzzleInput& puzzleInput)
 
 std::string PartTwo(const PuzzleInput& puzzleInput)
 {
-	return "";
+	auto lines = puzzleInput.Lines();
+	int  safeAmount{0};
+	for (auto& line : lines)
+	{
+		auto report = Report(line);
+		auto safe   = report.IsSafe();
+		if (!safe)
+		{
+			for (size_t levelIndex = 0; levelIndex < report.GetLevelCount(); ++levelIndex)
+			{
+				auto reducedReport{report};
+				reducedReport.RemoveLevelAt(levelIndex);
+				if (reducedReport.IsSafe())
+				{
+					safe = true;
+					break;
+				}
+			}
+		}
+
+		if (safe)
+			++safeAmount;
+	}
+	return std::to_string(safeAmount);
 }
