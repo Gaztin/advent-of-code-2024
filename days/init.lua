@@ -36,4 +36,5 @@ end
 
 return {
 	add_from_source_func(1),
+	add_from_source_func(2),
 }
