@@ -28,3 +28,8 @@ auto PuzzleInput::Lines() const -> std::vector<std::string_view>
 
 	return line_list;
 }
+
+auto PuzzleInput::Text() const -> std::string_view
+{
+	return m_inputText;
+}

@@ -10,6 +10,8 @@ public:
 
 	auto Lines() const -> std::vector<std::string_view>;
 
+	auto Text() const -> std::string_view;
+
 private:
 	std::string m_inputText{};
 };
